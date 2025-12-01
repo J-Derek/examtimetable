@@ -1,5 +1,5 @@
 import { GraduationCap } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
+
 
 export function Header() {
     return (
@@ -22,7 +22,6 @@ export function Header() {
                     <div className="hidden md:block text-sm text-white/60">
                         September 2025 Semester
                     </div>
-                    <ThemeToggle />
                 </div>
             </div>
         </header>
