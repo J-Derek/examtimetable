@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'Daystar Exam Timetable',
-        short_name: 'Exam Hub',
+        short_name: 'Daystar Exams',
         description: 'Find your exam schedule quickly and easily.',
         theme_color: '#0A2463',
         background_color: '#ffffff',
