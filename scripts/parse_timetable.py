@@ -55,7 +55,10 @@ def parse_all_timetables():
                     for col_idx in range(1, len(date_row)):
                         val = date_row[col_idx]
                         if pd.notna(val):
-                            current_date = str(val).strip()
+                            val_str = str(val).strip()
+                            # Ignore "CHAPEL" as a date, keep previous date
+                            if "CHAPEL" not in val_str.upper():
+                                current_date = val_str
                         col_dates[col_idx] = current_date
 
                     # Scan Data Rows

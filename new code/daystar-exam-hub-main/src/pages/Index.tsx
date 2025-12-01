@@ -3,6 +3,7 @@ import { Hero } from '@/components/Hero';
 import { Header } from '@/components/Header';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { InstallPrompt } from '@/components/InstallPrompt';
+import { TutorialOverlay } from '@/components/TutorialOverlay';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { SearchBar } from '@/components/SearchBar';
 import { ExamList } from '@/components/ExamList';
@@ -27,6 +28,13 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  // Auto-show My Units if user has favorites and no search query
+  useEffect(() => {
+    if (favorites.length > 0 && !searchQuery) {
+      setShowFavoritesOnly(true);
+    }
+  }, [favorites.length]); // Run when favorites change (initially loaded)
+
   const filteredExams = useFilteredExams(exams, debouncedSearchQuery);
 
   const displayedExams = showFavoritesOnly
@@ -40,6 +48,7 @@ const Index = () => {
       <Header />
       <OfflineIndicator />
       <InstallPrompt />
+      <TutorialOverlay />
       <ScrollToTop />
 
       {/* Draft Warning Banner */}

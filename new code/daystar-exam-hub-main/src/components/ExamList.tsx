@@ -3,7 +3,7 @@ import { EmptyState } from './EmptyState';
 import { SkeletonGroup } from './SkeletonCard';
 import { GroupedExams, Exam } from '@/types/exam';
 import { useConflicts } from '@/hooks/useConflicts';
-import { Star, Info } from 'lucide-react';
+import { Star, Info, BookOpen } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface ExamListProps {
@@ -45,7 +45,21 @@ export function ExamList({ groupedExams, loading, searchQuery, onToggleFavorite,
   }
 
   if (groupedExams.length === 0) {
-    return <EmptyState searchQuery={searchQuery} />;
+    return (
+      <div className="text-center py-12 animate-fade-in">
+        <div className="bg-white/50 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+          <BookOpen className="w-10 h-10 text-muted-foreground/50" />
+        </div>
+        <h3 className="text-lg font-medium text-foreground mb-2">
+          {searchQuery ? 'No exams found' : 'No exams to display'}
+        </h3>
+        <p className="text-muted-foreground max-w-sm mx-auto">
+          {searchQuery
+            ? `We couldn't find any exams matching "${searchQuery}". Try searching for a course code like "MAT120".`
+            : "Use the search bar above to find your exams."}
+        </p>
+      </div>
+    );
   }
 
   return (
