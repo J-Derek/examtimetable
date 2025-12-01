@@ -28,10 +28,10 @@ export function PinnedExams({ favorites, onToggleFavorite, isFavorite }: PinnedE
           </div>
           <div>
             <h2 className="text-lg font-semibold text-foreground">
-              My Pinned Exams
+              My Units
             </h2>
             <p className="text-sm text-muted-foreground">
-              {favorites.length} exam{favorites.length !== 1 ? 's' : ''} saved
+              {favorites.length} unit{favorites.length !== 1 ? 's' : ''} saved
             </p>
           </div>
         </div>
