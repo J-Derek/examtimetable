@@ -30,7 +30,7 @@ export function SearchBar({ value, onChange, resultsCount, totalCount }: SearchB
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Search for exams (e.g., MAT120A, ENG111)..."
+          placeholder="Search for exams (e.g., MAT120A, ENG111B)..."
           className="w-full pl-12 pr-12 py-4 bg-card text-foreground placeholder:text-muted-foreground rounded-2xl border border-border shadow-card focus:shadow-card-hover focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-200 text-base"
         />
         {value && (
