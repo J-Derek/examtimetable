@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Hero } from '@/components/Hero';
 import { Header } from '@/components/Header';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
+import { InstallPrompt } from '@/components/InstallPrompt';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { SearchBar } from '@/components/SearchBar';
 import { ExamList } from '@/components/ExamList';
@@ -22,6 +23,7 @@ const Index = () => {
     <div className="min-h-screen bg-offwhite font-sans text-foreground">
       <Header />
       <OfflineIndicator />
+      <InstallPrompt />
       <ScrollToTop />
 
       {/* Draft Warning Banner */}
