@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Hero } from '@/components/Hero';
 import { Header } from '@/components/Header';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
@@ -14,8 +14,19 @@ import { useFavorites } from '@/hooks/useFavorites';
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const { exams, loading, error } = useExams();
-  const filteredExams = useFilteredExams(exams, searchQuery);
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const filteredExams = useFilteredExams(exams, debouncedSearchQuery);
   const groupedExams = useGroupedExams(filteredExams);
   const { favorites, toggleFavorite, isFavorite, addMultipleFavorites } = useFavorites();
 
