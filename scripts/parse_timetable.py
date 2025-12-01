@@ -67,7 +67,7 @@ def parse_all_timetables():
                         for col_idx in range(1, len(row)):
                             cell_value = str(row[col_idx]).strip()
                             
-                            if cell_value.lower() == "nan" or cell_value.upper() == "CHAPEL":
+                            if cell_value.lower() == "nan" or "CHAPEL" in cell_value.upper():
                                 continue
                             
                             # Handle multiple exams in one cell (e.g., "ACS 113, MIS 114")
