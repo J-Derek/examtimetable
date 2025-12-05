@@ -52,28 +52,53 @@ export function useExams() {
   return { exams, loading, error };
 }
 
-export function useFilteredExams(exams: Exam[], searchQuery: string) {
-  const filteredExams = useMemo(() => {
-    if (!searchQuery.trim()) return exams;
+export const useFilteredExams = (
+  exams: Exam[] | undefined,
+  favorites: Exam[] | undefined,
+  searchQuery: string
+) => {
+  const sourceExams = favorites || exams || [];
 
-    const terms = searchQuery.toLowerCase().split(/[,\n|]+/).map(t => t.trim()).filter(Boolean);
+  return useMemo(() => {
+    // Safety check: ensure sourceExams is iterable
+    if (!Array.isArray(sourceExams)) return [];
 
-    return exams.filter(exam => {
-      return terms.some(term =>
-        exam.courseCode.toLowerCase().includes(term) ||
-        exam.venue.toLowerCase().includes(term) ||
-        exam.date.toLowerCase().includes(term) ||
-        (exam.campus && exam.campus.toLowerCase().includes(term))
-      );
+    if (!searchQuery.trim()) return sourceExams;
+
+    // Split query by commas, spaces, or pipes to support multiple units
+    const terms = searchQuery
+      .toLowerCase()
+      .split(/[\s,|+\n]+/)
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+
+    if (terms.length === 0) return sourceExams;
+
+    return sourceExams.filter((exam) => {
+      // Safety: Skip null/undefined exams
+      if (!exam) return false;
+
+      // Simple, safe string concatenation and checking
+      const examString = (
+        (exam.courseCode || '') + ' ' +
+        (exam.venue || '') + ' ' +
+        (exam.date || '') + ' ' +
+        (exam.campus || '')
+      ).toLowerCase();
+
+      // Match if ANY term is found in the exam string (OR logic)
+      return terms.some(term => examString.includes(term));
     });
-  }, [exams, searchQuery]);
-
-  return filteredExams;
-}
+  }, [sourceExams, searchQuery]);
+};
 
 export function useGroupedExams(exams: Exam[]): GroupedExams[] {
   return useMemo(() => {
+    // Safety check
+    if (!Array.isArray(exams)) return [];
+
     const grouped = exams.reduce((acc, exam) => {
+      if (!exam) return acc;
       const date = exam.date;
       if (!acc[date]) {
         acc[date] = [];

@@ -1,6 +1,7 @@
 import { Exam } from "@/types/exam";
 import { formatExamDate, formatExamTime, isExamPast } from "@/lib/dateUtils";
-import { MapPin, Clock, Calendar, AlertCircle, Star } from "lucide-react";
+import { MapPin, Clock, Calendar, AlertCircle, Star, Flame } from "lucide-react";
+import { useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ExamCardProps {
@@ -9,11 +10,23 @@ interface ExamCardProps {
   onToggleFavorite: (exam: Exam) => void;
   conflict?: string[]; // List of conflicting course codes
   isSoftConflict?: boolean;
+  isCooked: (exam: Exam) => boolean;
+  onToggleCooked: (exam: Exam) => void;
 }
 
-export function ExamCard({ exam, isFavorite, onToggleFavorite, conflict, isSoftConflict }: ExamCardProps) {
+export function ExamCard({ exam, isFavorite, onToggleFavorite, conflict, isSoftConflict, isCooked, onToggleCooked }: ExamCardProps) {
   const isPast = isExamPast(exam.date, exam.time);
   const isToday = new Date(exam.date).toDateString() === new Date().toDateString();
+  const cooked = isCooked(exam);
+  const [isBurning, setIsBurning] = useState(false);
+
+  const handleCook = () => {
+    setIsBurning(true);
+    setTimeout(() => {
+      onToggleCooked(exam);
+      setIsBurning(false);
+    }, 800); // Match animation duration
+  };
 
   // Determine card status color
   let statusColor = "bg-daystar-navy"; // Default
@@ -23,7 +36,7 @@ export function ExamCard({ exam, isFavorite, onToggleFavorite, conflict, isSoftC
 
   return (
     <div
-      className={`group relative flex flex-col sm:flex-row bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-border/50 ${isPast ? 'opacity-75 grayscale-[0.5]' : ''}`}
+      className={`group relative flex flex-col sm:flex-row bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-border/50 ${isPast ? 'opacity-75 grayscale-[0.5]' : ''} ${cooked ? 'cooked-item' : ''} ${isBurning ? 'animate-burn' : ''}`}
     >
       {/* Left Strip */}
       <div className={`h-2 sm:h-auto sm:w-3 ${statusColor} transition-colors duration-300`} />
@@ -71,15 +84,28 @@ export function ExamCard({ exam, isFavorite, onToggleFavorite, conflict, isSoftC
         </div>
 
         {/* Action Button */}
-        <button
-          onClick={() => onToggleFavorite(exam)}
-          className={`absolute top-4 right-4 sm:static p-2 rounded-full transition-colors ${isFavorite
+        <div className="flex flex-col gap-2 absolute top-4 right-4 sm:static">
+          <button
+            onClick={() => onToggleFavorite(exam)}
+            className={`p-2 rounded-full transition-colors ${isFavorite
               ? "bg-yellow-100 text-yellow-500 hover:bg-yellow-200"
               : "bg-gray-100 text-gray-400 hover:bg-daystar-blue/10 hover:text-daystar-blue"
-            }`}
-        >
-          <Star className={`w-5 h-5 ${isFavorite ? "fill-current" : ""}`} />
-        </button>
+              }`}
+          >
+            <Star className={`w-5 h-5 ${isFavorite ? "fill-current" : ""}`} />
+          </button>
+
+          <button
+            onClick={handleCook}
+            className={`p-2 rounded-full transition-colors ${cooked
+              ? "bg-orange-100 text-orange-500 hover:bg-orange-200"
+              : "bg-gray-100 text-gray-400 hover:bg-orange-50 hover:text-orange-500"
+              }`}
+            title={cooked ? "Uncook" : "Cook it!"}
+          >
+            <Flame className={`w-5 h-5 ${cooked ? "fill-current" : ""}`} />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -7,9 +7,11 @@ interface PinnedExamsProps {
   favorites: Exam[];
   onToggleFavorite: (exam: Exam) => void;
   isFavorite: (exam: Exam) => boolean;
+  isCooked: (exam: Exam) => boolean;
+  onToggleCooked: (exam: Exam) => void;
 }
 
-export function PinnedExams({ favorites, onToggleFavorite, isFavorite }: PinnedExamsProps) {
+export function PinnedExams({ favorites, onToggleFavorite, isFavorite, isCooked, onToggleCooked }: PinnedExamsProps) {
   // Only check conflicts within the pinned exams themselves
   const { hard: hardConflicts, soft: softConflicts } = useConflicts([], favorites);
   const hasConflicts = hardConflicts.size > 0;
@@ -56,6 +58,8 @@ export function PinnedExams({ favorites, onToggleFavorite, isFavorite }: PinnedE
         onToggleFavorite={onToggleFavorite}
         isFavorite={isFavorite}
         conflicts={hardConflicts}
+        isCooked={isCooked}
+        onToggleCooked={onToggleCooked}
       />
     </section>
   );

@@ -15,7 +15,13 @@ export function useFavorites() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        setFavorites(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setFavorites(parsed);
+        } else {
+          console.error('Invalid favorites data found, resetting.');
+          setFavorites([]);
+        }
       }
     } catch (error) {
       console.error('Failed to load favorites:', error);

@@ -13,9 +13,13 @@ interface ExamListProps {
   onToggleFavorite: (exam: Exam) => void;
   onPinMultiple: (exams: Exam[]) => void;
   isFavorite: (exam: Exam) => boolean;
+  isCooked: (exam: Exam) => boolean;
+  onToggleCooked: (exam: Exam) => void;
+  totalMatchCount?: number;
+  visibleMatchCount?: number;
 }
 
-export function ExamList({ groupedExams, loading, searchQuery, onToggleFavorite, onPinMultiple, isFavorite, favorites = [] }: ExamListProps & { favorites?: Exam[] }) {
+export function ExamList({ groupedExams, loading, searchQuery, onToggleFavorite, onPinMultiple, isFavorite, favorites = [], isCooked, onToggleCooked, totalMatchCount = 0, visibleMatchCount = 0 }: ExamListProps & { favorites?: Exam[] }) {
   // Flatten exams for the table view
   const allExams = groupedExams.flatMap(group => group.exams);
   // Check conflicts: Search Results vs Pinned Exams (and Pinned vs Pinned)
@@ -119,11 +123,25 @@ export function ExamList({ groupedExams, loading, searchQuery, onToggleFavorite,
                 onToggleFavorite={onToggleFavorite}
                 conflict={conflictList}
                 isSoftConflict={isSoft}
+                isCooked={isCooked}
+                onToggleCooked={onToggleCooked}
               />
             </div>
           );
         })}
+
       </div>
+
+      {totalMatchCount > visibleMatchCount && (
+        <div className="mt-8 text-center p-6 bg-white/50 rounded-xl border border-dashed border-gray-200 animate-fade-in">
+          <p className="text-muted-foreground font-medium">
+            Showing first {visibleMatchCount} of {totalMatchCount} results.
+          </p>
+          <p className="text-xs text-muted-foreground/70 mt-1">
+            Please type a more specific search term to find your exam.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

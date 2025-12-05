@@ -1,7 +1,11 @@
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Share2, Download } from "lucide-react";
 
+interface HeaderProps {
+    onShare: () => void;
+    onDownload: () => void;
+}
 
-export function Header() {
+export function Header({ onShare, onDownload }: HeaderProps) {
     return (
         <header className="sticky top-0 z-50 w-full bg-daystar-navy text-white shadow-md">
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -16,12 +20,21 @@ export function Header() {
                     </div>
                 </div>
 
-                {/* Optional: Right side actions (e.g. User Profile or Help) */}
-                {/* Optional: Right side actions (e.g. User Profile or Help) */}
-                <div className="flex items-center gap-4">
-                    <div className="hidden md:block text-sm text-white/60">
-                        September 2025 Semester
-                    </div>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onShare}
+                        className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+                        title="Share App"
+                    >
+                        <Share2 className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={onDownload}
+                        className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+                        title="Download Timetable"
+                    >
+                        <Download className="w-5 h-5" />
+                    </button>
                 </div>
             </div>
         </header>

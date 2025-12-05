@@ -14,16 +14,18 @@ import {
 } from "@/components/ui/tooltip";
 import { Exam } from "@/types/exam";
 import { formatExamDate, formatExamTime, isExamPast } from "@/lib/dateUtils";
-import { Star, Clock, AlertCircle, MapPin } from "lucide-react";
+import { Star, Clock, AlertCircle, MapPin, Flame } from "lucide-react";
 
 interface ExamTableProps {
     exams: Exam[];
     onToggleFavorite: (exam: Exam) => void;
     isFavorite: (exam: Exam) => boolean;
     conflicts?: Map<string, Set<string>> | Set<string>;
+    isCooked: (exam: Exam) => boolean;
+    onToggleCooked: (exam: Exam) => void;
 }
 
-export function ExamTable({ exams, onToggleFavorite, isFavorite, conflicts }: ExamTableProps) {
+export function ExamTable({ exams, onToggleFavorite, isFavorite, conflicts, isCooked, onToggleCooked }: ExamTableProps) {
     return (
         <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden animate-fade-in">
             <Table>
@@ -41,6 +43,7 @@ export function ExamTable({ exams, onToggleFavorite, isFavorite, conflicts }: Ex
                     {exams.map((exam, index) => {
                         const isPast = isExamPast(exam.date, exam.time);
                         const isFav = isFavorite(exam);
+                        const cooked = isCooked(exam);
 
                         // Handle both Set (old/simple) and Map (new/detailed) conflict types
                         let hasConflict = false;
@@ -58,7 +61,7 @@ export function ExamTable({ exams, onToggleFavorite, isFavorite, conflicts }: Ex
                         return (
                             <TableRow
                                 key={`${exam.courseCode}-${exam.date}-${exam.time}-${index}`}
-                                className={`${isPast ? "opacity-60 bg-muted/20" : ""} ${hasConflict ? "bg-destructive/10 hover:bg-destructive/20" : ""}`}
+                                className={`${isPast ? "opacity-60 bg-muted/20" : ""} ${hasConflict ? "bg-destructive/10 hover:bg-destructive/20" : ""} ${cooked ? "cooked-item" : ""}`}
                             >
                                 <TableCell>
                                     {hasConflict ? (
@@ -114,12 +117,24 @@ export function ExamTable({ exams, onToggleFavorite, isFavorite, conflicts }: Ex
                                 <TableCell className="text-right">
                                     <button
                                         onClick={() => onToggleFavorite(exam)}
-                                        className={`p-2 rounded-lg transition-colors ${isFav
+                                        className={`p-2 rounded-lg transition-colors mr-1 ${isFav
                                             ? "text-warning bg-warning/10"
                                             : "text-muted-foreground hover:bg-muted"
                                             }`}
+                                        title={isFav ? "Unpin exam" : "Pin exam"}
                                     >
                                         <Star className={`w-4 h-4 ${isFav ? "fill-warning" : ""}`} />
+                                    </button>
+
+                                    <button
+                                        onClick={() => onToggleCooked(exam)}
+                                        className={`p-2 rounded-lg transition-colors ${cooked
+                                            ? "text-orange-500 bg-orange-100"
+                                            : "text-muted-foreground hover:bg-muted"
+                                            }`}
+                                        title={cooked ? "Uncook exam" : "Mark as Cooked (Done)"}
+                                    >
+                                        <Flame className={`w-4 h-4 ${cooked ? "fill-orange-500" : ""}`} />
                                     </button>
                                 </TableCell>
                             </TableRow>
