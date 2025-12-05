@@ -43,6 +43,13 @@ export function SearchBar({ value, onChange, resultsCount, totalCount }: SearchB
         )}
       </div>
 
+      {/* Search Tip */}
+      <div className="mt-2 text-center">
+        <p className="text-xs text-muted-foreground/80">
+          Tip: You can search multiple units at once! Just separate them with a comma (e.g., <span className="font-mono bg-muted px-1 rounded">INS111, ACS413</span>)
+        </p>
+      </div>
+
       {/* Results count */}
       <div className="mt-3 text-center">
         <p className="text-sm text-muted-foreground">

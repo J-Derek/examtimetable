@@ -56,7 +56,7 @@ export function useFilteredExams(exams: Exam[], searchQuery: string) {
   const filteredExams = useMemo(() => {
     if (!searchQuery.trim()) return exams;
 
-    const terms = searchQuery.toLowerCase().split(',').map(t => t.trim()).filter(Boolean);
+    const terms = searchQuery.toLowerCase().split(/[,\n|]+/).map(t => t.trim()).filter(Boolean);
 
     return exams.filter(exam => {
       return terms.some(term =>
