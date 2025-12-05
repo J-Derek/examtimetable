@@ -8,7 +8,7 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 import { SearchBar } from '@/components/SearchBar';
 import { ExamList } from '@/components/ExamList';
 import { PinnedExams } from '@/components/PinnedExams';
-import { DraftBanner } from '@/components/DraftBanner';
+
 import { useExams, useFilteredExams, useGroupedExams } from '@/hooks/useExams';
 import { useFavorites } from '@/hooks/useFavorites';
 
@@ -51,8 +51,7 @@ const Index = () => {
       <TutorialOverlay />
       <ScrollToTop />
 
-      {/* Draft Warning Banner */}
-      <DraftBanner />
+
 
       {/* Hero Section */}
       <Hero />
